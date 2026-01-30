@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>किसान बाज़ार - ताजी सब्जियां</title>
+    <style>
+        :root { --farm-green: #2ecc71; --dark-green: #27ae60; --bg: #f8f9fa; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
+        header { background: var(--dark-green); color: white; text-align: center; padding: 20px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        
+        .main-container { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; max-width: 1300px; margin: auto; }
+        .product-grid { flex: 3; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+        
+        .card { background: white; border-radius: 15px; padding: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; }
+        .card img { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
+        
+        .qty-box { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px; }
+        .qty-btn { background: #e9ecef; border: none; width: 35px; height: 35px; border-radius: 50%; font-size: 20px; cursor: pointer; font-weight: bold; }
+        .qty-val { font-weight: bold; width: 70px; font-size: 14px; color: var(--dark-green); }
+
+        .add-btn { background: var(--farm-green); color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .sidebar { flex: 1; min-width: 300px; background: white; padding: 25px; border-radius: 15px; height: fit-content; position: sticky; top: 100px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed #ddd; }
+        .remove-btn { color: #ff4757; cursor: pointer; border: none; background: none; font-size: 18px; }
+        .whatsapp-btn { background: #25D366; color: white; width: 100%; padding: 18px; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+
+        @media (max-width: 768px) { .main-container { flex-direction: column; } .sidebar { position: static; } }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🌿 शुद्ध देसी सब्जिया फर्म</h1>
+    <p>250 ग्राम से लेकर किलो तक - ताज़ी सब्जियां</p>
+</header>
+
+<div class="main-container">
+    <div class="product-grid" id="productGrid"></div>
+
+    <div class="sidebar">
+        <h3 style="color: var(--dark-green);">📋 ऑर्डर विवरण</h3>
+        <input type="text" id="custName" placeholder="आपका नाम">
+        <input type="number" id="custPhone" placeholder="मोबाइल नंबर">
+        <textarea id="custAddr" placeholder="पूरा पता" rows="3"></textarea>
+        
+        <h3>🛒 आपका थैला</h3>
+        <div id="cartList">थैला खाली है...</div>
+        <hr>
+        <div style="display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;">
+            <span>कुल बिल:</span>
+            <span>₹<span id="totalBill">0</span></span>
+        </div>
+        <button class="whatsapp-btn" onclick="sendOrder()">WhatsApp पर ऑर्डर भेजें</button>
+    </div>
+</div>
+
+<script>
+    const veggies = [
+        { id: 1, name: "ताज़ा टमाटर", price: 40, img: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=200" },
+        { id: 2, name: "आलू", price: 30, img: "https://images.unsplash.com/photo-1518977676601-b53f02ac6d31?w=200" },
+        { id: 3, name: "देसी प्याज", price: 35, img: "https://images.unsplash.com/photo-1508747703725-719777637510?w=200" },
+        { id: 4, name: "ऑर्गेनिक पालक", price: 20, img: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=200" },
+        { id: 5, name: "हरी मिर्च", price: 60, img: "https://images.unsplash.com/photo-1588252391480-20704040953a?w=200" }
+        // ... (आप और भी सब्जियां यहाँ जोड़ सकते हैं)
+    ];
+
+    let cart = [];
+
+    function renderProducts() {
+        const grid = document.getElementById('productGrid');
+        grid.innerHTML = veggies.map(v => `
+            <div class="card">
+                <img src="${v.img}" alt="${v.name}">
+                <h4>${v.name}</h4>
+                <p>₹${v.price} / किलो</p>
+                <div class="qty-box">
+                    <button class="qty-btn" onclick="updateQtyVal(${v.id}, -0.25)">-</button>
+                    <span class="qty-val" id="qval-${v.id}">0.25 kg</span>
+                    <button class="qty-btn" onclick="updateQtyVal(${v.id}, 0.25)">+</button>
+                </div>
+                <button class="add-btn" onclick="addToCart(${v.id})">थैले में डालें</button>
+            </div>
+        `).join('');
+    }
+
+    function updateQtyVal(id, delta) {
+        const el = document.getElementById(`qty-${id}`); // यहाँ आईडी सुधारें
+        const qtyDisplay = document.getElementById(`qval-${id}`);
+        let current = parseFloat(qtyDisplay.innerText);
+        let updated = current + delta;
+        if(updated < 0.25) updated = 0.25; // कम से कम 250 ग्राम
+        qtyDisplay.innerText = updated.toFixed(2) + " kg";
+    }
+
+    function addToCart(id) {
+        const veg = veggies.find(v => v.id === id);
+        const qty = parseFloat(document.getElementById(`qval-${id}`).innerText);
+        const subtotal = (veg.price * qty).toFixed(2);
+
+        cart.push({ ...veg, qty, subtotal: parseFloat(subtotal) });
+        updateCartUI();
+    }
+
+    function removeItem(index) {
+        cart.splice(index, 1);
+        updateCartUI();
+    }
+
+    function updateCartUI() {
+        const list = document.getElementById('cartList');
+        const bill = document.getElementById('totalBill');
+        
+        if(cart.length === 0) {
+            list.innerHTML = "थैला खाली है...";
+            bill.innerText = "0";
+            return;
+        }
+
+        list.innerHTML = cart.map((item, index) => `
+            <div class="cart-item">
+                <span><b>${item.name}</b> (${item.qty}kg)</span>
+                <span>₹${item.subtotal} <button class="remove-btn" onclick="removeItem(${index})">🗑️</button></span>
+            </div>
+        `).join('');
+
+        const total = cart.reduce((s, i) => s + i.subtotal, 0);
+        bill.innerText = total.toFixed(2);
+    }
+
+    function sendOrder() {
+        const name = document.getElementById('custName').value;
+        const phone = document.getElementById('custPhone').value;
+        const addr = document.getElementById('custAddr').value;
+        const total = document.getElementById('totalBill').innerText;
+
+        if(!name || !phone || !addr || cart.length === 0) {
+            alert("कृपया नाम, फोन, पता भरें और सब्जियां चुनें!");
+            return;
+        }
+
+        let msg = `*नया सब्जी ऑर्डर*%0a*ग्राहक:* ${name}%0a*फोन:* ${phone}%0a*पता:* ${addr}%0a%0a*आइटम:*%0a`;
+        cart.forEach((i, idx) => {
+            msg += `${idx+1}. ${i.name} (${i.qty}kg) - ₹${i.subtotal}%0a`;
+        });
+        msg += `%0a*कुल बिल: ₹${total}*`;
+
+        const myNumber = "916200730782"; // अपना नंबर यहाँ डालें
+        window.open(`https://wa.me/${myNumber}?text=${msg}`);
+    }
+
+    renderProducts();
+</script>
+</body>
+</html>
