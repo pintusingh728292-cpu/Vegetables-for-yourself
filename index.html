@@ -153,6 +153,15 @@
     }
 
     renderProducts();
+function updateQR(amount) {
+    const upiId = "6200730782@fam"; // आपकी UPI ID
+    // QR कोड बनाने वाला लिंक
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=${upiId}&pn=KisanBazar&am=${amount}&cu=INR`;
+    
+    // इमेज को अपडेट करना
+    document.querySelector('#qrBox img').src = qrUrl;
+}
+
 </script>
 </body>
 </html>
