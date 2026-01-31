@@ -51,7 +51,14 @@
         <hr>
         <div style="display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;">
             <span>कुल बिल:</span>
-            <span>₹<span id="totalBill">0</span></span>
+            <span>₹<span id="totalBill">0
+        </div>
+            <div class="payment-box">
+            <p style="margin: 0; font-weight: bold; color: #f57f17;">💳 ऑनलाइन पेमेंट करें</p>
+            <div class="qr-placeholder" id="qrContainer">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=upi://pay?pa=YOUR_UPI_ID@okicici&pn=KisanBazar&cu=INR" alt="QR Code" style="width:100%">
+            </div>
+            <small>UPI ID: 6200730782@fam</small>
         </div>
         <button class="whatsapp-btn" onclick="sendOrder()">WhatsApp पर ऑर्डर भेजें</button>
     </div>
