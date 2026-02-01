@@ -61,7 +61,7 @@
 <script>
     // Ab yahan 14 tarah ki sabziyan hain
     const items = [
-        { id: 1, name: "टमाटर", price: 40, img: "https://cdn.pixabay.com/photo/2011/03/16/16/01/tomatoes-5356_640.jpg" },
+        { id: 1, name: "टमाटर", price: 20, img: "https://cdn.pixabay.com/photo/2011/03/16/16/01/tomatoes-5356_640.jpg" },
         { id: 2, name: "आलू", price: 25, img: "https://cdn.pixabay.com/photo/2014/08/06/20/32/potatoes-411975_640.jpg" },
         { id: 3, name: "प्याज", price: 35, img: "https://cdn.pixabay.com/photo/2016/05/03/15/22/onion-1369342_640.jpg" },
         { id: 4, name: "मिर्च", price: 60, img: "https://cdn.pixabay.com/photo/2016/06/07/17/14/chili-1442131_640.jpg" },
