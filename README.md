@@ -67,12 +67,12 @@
 <button class="float-btn" id="jump" onclick="document.getElementById('checkout').scrollIntoView({behavior:'smooth'})">🛒 बिल देखें (<span id="count">0</span>)</button>
 
 <div class="bottom-nav">
-    <a href="tel:+91XXXXXXXXXX" class="nav-btn">📞 सहायता</a>
+    <a href="tel:+916200730782" class="nav-btn">📞 सहायता</a>
     <button class="nav-btn" style="background:#1a1a1a; color:white; border:none;" onclick="alert('पिन: 5566')">👤 स्टाफ</button>
 </div>
 
 <script>
-    const WA_NUM = "91XXXXXXXXXX"; 
+    const WA_NUM = "916200730782"; 
 
     let db = [
         { id: 1, name: "टमाटर", price: 30, stock: 40, unit: "kg", img: "https://cdn.pixabay.com/photo/2011/03/16/16/01/tomatoes-5356_1280.jpg" },
