@@ -237,7 +237,7 @@ input,textarea,select {
 const WA_NUM="916200730782",UPI_ID="6200730782@fam",S_P="NTU2Ng==";
 let isStaff=false,cart={};
 let db=[
-{id:1,name:"टमाटर",price:40,img:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAYAAADdU..."},
+{id:1,name:"टमाटर",price:40,img:"data:image/"https://example.com/images/tamatar.png" },
 {id:2,name:"आलू",price:30,img:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAYAAADdU..."},
 {id:3,name:"प्याज़",price:50,img:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAYAAADdU..."},
 {id:4,name:"भिंडी",price:60,img:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAYAAADdU..."},
